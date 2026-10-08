@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Interpolación Lineal</title>
+    <!-- Carga de PyScript -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --accent-color: #319795;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 950px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 18px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        input[type="file"], input[type="text"], select {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--primary-color);
+        }
+
+        .formula-box {
+            background: #edf2f7;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            font-family: monospace;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .formula-explanation {
+            font-size: 13px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .result-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .result-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent-color);
+            background: #e6fffa;
+            padding: 12px 20px;
+            border-radius: 6px;
+            border: 1px solid #b2f5ea;
+            flex-grow: 1;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .team-member {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .team-member input {
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        table.preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+            max-height: 150px;
+            display: block;
+            overflow-y: auto;
+        }
+
+        table.preview-table th, table.preview-table td {
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
+            text-align: left;
+        }
+
+        table.preview-table th {
+            background-color: #edf2f7;
+        }
+
+        #python-loading {
+            font-style: italic;
+            color: #e53e3e;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calculadora de Interpolación Lineal</h1>
+    <div class="subtitle">Herramienta con alta precisión decimal mediante motor Python (PyScript)</div>
+
+    <!-- Sección de Integrantes -->
+    <div class="section">
+        <h3>Integrantes del Grupo (5)</h3>
+        <div class="team-grid">
+            <div class="team-member">
+                <label>Integrante 1</label>
+                <input type="text" placeholder="Nombre 1">
+            </div>
+            <div class="team-member">
+                <label>Integrante 2</label>
+                <input type="text" placeholder="Nombre 2">
+            </div>
+            <div class="team-member">
+                <label>Integrante 3</label>
+                <input type="text" placeholder="Nombre 3">
+            </div>
+            <div class="team-member">
+                <label>Integrante 4</label>
+                <input type="text" placeholder="Nombre 4">
+            </div>
+            <div class="team-member">
+                <label>Integrante 5</label>
+                <input type="text" placeholder="Nombre 5">
+            </div>
+        </div>
+    </div>
+
+    <!-- Explicación y Fórmula -->
+    <div class="section">
+        <h3>Fundamento Teórico</h3>
+        <div class="formula-box">
+            y = ((x - x₁) / (x₂ - x₁)) · (y₂ - y₁) + y₁
+        </div>
+        <div class="formula-explanation">
+            La fórmula permite calcular un valor desconocido de <strong>y</strong> a partir de un valor de <strong>x</strong> ingresado, ubicando automáticamente los puntos adyacentes de la tabla (x₁, y₁ y x₂, y₂). Es útil tanto para interpolación interna como para extrapolación cuando el valor se encuentra fuera del rango tabular.
+        </div>
+    </div>
+
+    <!-- Panel de Carga y Configuración de Datos -->
+    <div class="section">
+        <h3>Carga y Mapeo de Datos CSV</h3>
+        <div id="python-loading">Cargando entorno de Python (PyScript), por favor espere un momento...</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="csvFile">Seleccionar archivo CSV (separado por comas):</label>
+                <input type="file" id="csvFile" accept=".csv" onchange="cargarCSV(event)">
+            </div>
+            <div class="form-group">
+                <label for="valX">Valor de X a buscar / interpolar:</label>
+                <input type="text" id="valX" placeholder="Ej: 79">
+            </div>
+        </div>
+
+        <div class="form-grid" style="margin-top: 15px;">
+            <div class="form-group">
+                <label for="colXSelect">Seleccionar Columna para X:</label>
+                <select id="colXSelect" disabled>
+                    <option value="">-- Primero cargue un CSV --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="colYSelect">Seleccionar Columna para Y:</label>
+                <select id="colYSelect" disabled>
+                    <option value="">-- Primero cargue un CSV --</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button id="calcBtn" py-click="ejecutar_interpolacion" disabled>Calcular Interpolación</button>
+        </div>
+
+        <div id="previewContainer" style="margin-top: 15px; display:none;">
+            <label>Vista previa de datos cargados:</label>
+            <table class="preview-table" id="previewTable"></table>
+        </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="section">
+        <h3>Resultado de la Interpolación</h3>
+        <div class="result-container">
+            <div class="result-display" id="resultadoSalida">Esperando datos y cálculo...</div>
+            <div class="form-group" style="width: 220px; margin-bottom: 0;">
+                <label for="unidadMedida">Unidad de Medida:</label>
+                <select id="unidadMedida">
+                    <option value="°C">°C (Celsius)</option>
+                    <option value="°F">°F (Fahrenheit)</option>
+                    <option value="K">K (Kelvin)</option>
+                    <option value="m">m (Metros)</option>
+                    <option value="s">s (Segundos)</option>
+                    <option value="kg">kg (Kilogramos)</option>
+                    <option value="unidades">Unidades Personalizadas</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts de manejo y limpieza de CSV en JavaScript -->
+<script>
+    // Variables globales expuestas para acceso directo desde PyScript
+    window.csvGlobalData = [];
+    window.csvHeaders = [];
+
+    function cargarCSV(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            procesarTextoCSV(text);
+        };
+        reader.readAsText(file);
+    }
+
+    function limpiarValor(val) {
+        if (!val) return "";
+        // Eliminar comillas dobles, simples, espacios extra o caracteres sobrantes alrededor
+        return val.replace(/^["']+|["']+$/g, '').trim();
+    }
+
+    function procesarTextoCSV(text) {
+        const lines = text.split(/\r\n|\n/).filter(line => line.trim() !== "");
+        if (lines.length === 0) return;
+
+        // Procesar cabeceras limpiando comillas
+        window.csvHeaders = lines[0].split(',').map(h => limpiarValor(h));
+        
+        // Procesar filas de datos limpiando comillas y caracteres no deseados
+        window.csvGlobalData = lines.slice(1).map(line => {
+            return line.split(',').map(val => limpiarValor(val));
+        }).filter(row => row.some(cell => cell !== ""));
+
+        const colX = document.getElementById('colXSelect');
+        const colY = document.getElementById('colYSelect');
+        colX.innerHTML = "";
+        colY.innerHTML = "";
+
+        window.csvHeaders.forEach((header, index) => {
+            colX.innerHTML += `<option value="${index}">${header} (Col ${index})</option>`;
+            colY.innerHTML += `<option value="${index}">${header} (Col ${index})</option>`;
+        });
+
+        if (window.csvHeaders.length > 1) {
+            colY.selectedIndex = 1;
+        }
+
+        colX.disabled = false;
+        colY.disabled = false;
+        document.getElementById('calcBtn').disabled = false;
+
+        mostrarVistaPrevia();
+    }
+
+    function mostrarVistaPrevia() {
+        const container = document.getElementById('previewContainer');
+        const table = document.getElementById('previewTable');
+        container.style.display = 'block';
+
+        let html = '<thead><tr>';
+        window.csvHeaders.forEach(h => html += `<th>${h}</th>`);
+        html += '</tr></thead><tbody>';
+
+        const muestra = window.csvGlobalData.slice(0, 5);
+        muestra.forEach(row => {
+            html += '<tr>';
+            row.forEach(val => html += `<td>${val}</td>`);
+            html += '</tr>';
+        });
+        html += '</tbody>';
+        table.innerHTML = html;
+    }
+
+    window.addEventListener('py:ready', () => {
+        const statusEl = document.getElementById('python-loading');
+        if(statusEl) {
+            statusEl.innerText = "¡Entorno Python listo para cálculos de alta precisión!";
+            statusEl.style.color = "#319795";
+        }
+    });
+</script>
+
+<!-- Script integrado en Python mediante PyScript -->
+<script type="py">
+from pyscript import document
+from decimal import Decimal, getcontext
+import js
+import re
+
+# Configurar alta precisión decimal para evitar problemas de redondeo
+getcontext().prec = 50
+
+def parse_val(val_str):
+    if val_str is None:
+        return None
+    val_str = str(val_str).strip()
+    # Limpiar comillas o unidades extra remanentes
+    val_str = re.sub(r'^["\']+|["\']+$', '', val_str).strip()
+    
+    for suffix in ['°C', '°F', 'K', 'm', 's', 'kg']:
+        if val_str.endswith(suffix):
+            val_str = val_str[:-len(suffix)].strip()
+            
+    # Manejar separadores de miles si los hubiera (ej: 1,532,000 -> 1532000)
+    if ',' in val_str and '.' not in val_str:
+        val_str = val_str.replace(',', '')
+
+    try:
+        return Decimal(val_str)
+    except Exception:
+        if ':' in val_str:
+            try:
+                partes = val_str.replace('AM', '').replace('PM', '').strip().split(':')
+                horas = Decimal(partes[0])
+                minutos = Decimal(partes[1])
+                return horas * Decimal(60) + minutos
+            except Exception:
+                pass
+        return None
+
+def ejecutar_interpolacion(event):
+    try:
+        val_x_str = js.document.getElementById('valX').value
+        col_x_idx = int(js.document.getElementById('colXSelect').value)
+        col_y_idx = int(js.document.getElementById('colYSelect').value)
+        unidad = js.document.getElementById('unidadMedida').value
+
+        if not val_x_str:
+            js.document.getElementById('resultadoSalida').innerText = "Por favor ingrese un valor de X."
+            return
+
+        # Acceso robusto a los datos globales del CSV desde JavaScript
+        raw_data = getattr(js, 'csvGlobalData', None)
+        if raw_data is None or len(raw_data) == 0:
+            js.document.getElementById('resultadoSalida').innerText = "No hay datos CSV cargados o la variable global no está disponible."
+            return
+
+        x_objetivo = parse_val(val_x_str)
+        if x_objetivo is None:
+            js.document.getElementById('resultadoSalida').innerText = "El valor de X ingresado no es un número válido."
+            return
+        
+        puntos = []
+        for row in raw_data:
+            # Asegurar que la fila sea iterable y tenga suficientes columnas
+            if row and len(row) > max(col_x_idx, col_y_idx):
+                val_x_raw = row[col_x_idx]
+                val_y_raw = row[col_y_idx]
+                
+                parsed_x = parse_val(val_x_raw)
+                parsed_y = parse_val(val_y_raw)
+                
+                if parsed_x is not None and parsed_y is not None:
+                    try:
+                        dx = Decimal(str(parsed_x))
+                        dy = Decimal(str(parsed_y))
+                        puntos.append((dx, dy))
+                    except Exception:
+                        continue
+
+        if len(puntos) < 2:
+            js.document.getElementById('resultadoSalida').innerText = f"Se necesitan al menos 2 filas válidas de datos numéricos. Filas detectadas válidas: {len(puntos)}"
+            return
+
+        # Ordenar los puntos por X de menor a mayor
+        puntos.sort(key=lambda p: p[0])
+
+        x1, y1 = None, None
+        x2, y2 = None, None
+
+        if x_objetivo <= puntos[0][0]:
+            x1, y1 = puntos[0]
+            x2, y2 = puntos[1]
+        elif x_objetivo >= puntos[-1][0]:
+            x1, y1 = puntos[-2]
+            x2, y2 = puntos[-1]
+        else:
+            for i in range(len(puntos) - 1):
+                if puntos[i][0] <= x_objetivo <= puntos[i+1][0]:
+                    x1, y1 = puntos[i]
+                    x2, y2 = puntos[i+1]
+                    break
+        
+        if x1 is None or x2 is None:
+            x1, y1 = puntos[0]
+            x2, y2 = puntos[1]
+
+        x = Decimal(str(x_objetivo))
+        denominador = x2 - x1
+        if denominador == 0:
+            js.document.getElementById('resultadoSalida').innerText = "Error: X₁ y X₂ son iguales (división por cero)."
+            return
+
+        resultado_y = ((x - x1) / denominador) * (y2 - y1) + y1
+        resultado_formateado = f"{resultado_y:f}"#.rstrip('0').rstrip('.')
+        if resultado_formateado.endswith('.'):
+            resultado_formateado += '0'
+        
+        info_texto = f"Y = {resultado_formateado} {unidad}  |  (Puntos base: X₁={x1}, Y₁={y1} y X₂={x2}, Y₂={y2})"
+        js.document.getElementById('resultadoSalida').innerText = info_texto
+
+    except Exception as e:
+        js.document.getElementById('resultadoSalida').innerText = f"Error en el cálculo: {str(e)}"
+</script>
+
+</body>
+</html>
